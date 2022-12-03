@@ -1,0 +1,2 @@
+# just xformers builder on github action
+inspired from https://github.com/ninele7/xfromers_builds/blob/main/.github/workflows/build.yml and from https://github.com/facebookresearch/xformers/blob/main/.github/workflows/wheels.yml
