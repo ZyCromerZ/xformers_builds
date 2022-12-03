@@ -2,89 +2,153 @@ name: CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: 
+        - "main"
   workflow_dispatch:
 
 env:
   NVCC_FLAGS: "-allow-unsupported-compiler"
-  TORCH_CUDA_ARCH_LIST: "7.0;7.5;8.0;8.6+PTX"
   DISTUTILS_USE_SDK: 1
   FORCE_CUDA: 1
+  XFORMERS_BUILD_TYPE: "Release"
+  # MAX_JOBS: 4
 
 jobs:
   build:
-    runs-on: ${{ matrix.os-version }}
+
+    # defaults:
+    #   run:
+    #     shell: bash
+
+    timeout-minutes: 360
     
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - os-version: ubuntu-latest
-            python-version: '3.10'
-            cuda-version: '11.3.1'
+        os:
+          - windows-latest
+          - ubuntu-22.04
+        python:
+          - "3.10"
+          - "3.8"
+        config:
+          - cuda-version: '11.8.0'
+            commit-hash: '4c06c79095ba'
+            arch-list:  "6.0 6.1 6.2 7.0 7.2 7.5 8.0 8.6"
             torch-install-command: 'torch==1.12.1+cu113 torchvision==0.13.1+cu113 --extra-index-url https://download.pytorch.org/whl/cu113'
-          - os-version: windows-latest
-            python-version: '3.10'
-            cuda-version: '11.3.1'
+            torch-ver: '1.12.1+cu113'
+            alt: ''
+          - cuda-version: '11.8.0'
+            commit-hash: '4c06c79095ba'
+            arch-list:  "6.0+PTX 6.1+PTX 6.2+PTX 7.0+PTX 7.2+PTX 7.5+PTX 8.0+PTX 8.6+PTX"
             torch-install-command: 'torch==1.12.1+cu113 torchvision==0.13.1+cu113 --extra-index-url https://download.pytorch.org/whl/cu113'
-          - os-version: ubuntu-latest
-            python-version: '3.8'
-            cuda-version: '11.7.0'
-            torch-install-command: 'torch==1.13.0+cu117 torchvision==0.14.0+cu117 --extra-index-url https://download.pytorch.org/whl/cu117'
-          - os-version: windows-latest
-            python-version: '3.8'
-            cuda-version: '11.7.0'
-            torch-install-command: 'torch==1.13.0+cu117 torchvision==0.14.0+cu117 --extra-index-url https://download.pytorch.org/whl/cu117'
+            torch-ver: '1.12.1+cu113'
+            alt: '-PTX'
+          - cuda-version: '11.8.0'
+            commit-hash: '4c06c79095ba'
+            arch-list:  "6.0 6.1 6.2"
+            torch-install-command: 'torch==1.12.1+cu113 torchvision==0.13.1+cu113 --extra-index-url https://download.pytorch.org/whl/cu113'
+            torch-ver: '1.12.1+cu113'
+            alt: '-6.x'
+          - cuda-version: '11.8.0'
+            commit-hash: '4c06c79095ba'
+            arch-list:  "6.0+PTX 6.1+PTX 6.2+PTX"
+            torch-install-command: 'torch==1.12.1+cu113 torchvision==0.13.1+cu113 --extra-index-url https://download.pytorch.org/whl/cu113'
+            torch-ver: '1.12.1+cu113'
+            alt: '-6.x-PTX'
+          - cuda-version: '11.8.0'
+            commit-hash: '4c06c79095ba'
+            arch-list:  "6.0 6.1 6.2 7.0 7.2 7.5 8.0 8.6"
+            torch-install-command: 'torch==1.13.0+cu116 torchvision==0.14.0+cu116 --extra-index-url https://download.pytorch.org/whl/cu116'
+            torch-ver: '1.13.0+cu116'
+            alt: ''
+          - cuda-version: '11.8.0'
+            commit-hash: '4c06c79095ba'
+            arch-list:  "6.0+PTX 6.1+PTX 6.2+PTX 7.0+PTX 7.2+PTX 7.5+PTX 8.0+PTX 8.6+PTX"
+            torch-install-command: 'torch==1.13.0+cu116 torchvision==0.14.0+cu116 --extra-index-url https://download.pytorch.org/whl/cu116'
+            torch-ver: '1.13.0+cu116'
+            alt: '-PTX'
+          - cuda-version: '11.8.0'
+            commit-hash: '4c06c79095ba'
+            arch-list:  "6.0 6.1 6.2 7.0 7.2 7.5 8.0 8.6"
+            torch-install-command: 'torch==1.14.0.dev20221121+cu117 torchvision==0.15.0.dev20221121+cu117 --extra-index-url https://download.pytorch.org/whl/nightly'
+            torch-ver: '1.14.0.dev20221121+cu117'
+            alt: ''
+          - cuda-version: '11.8.0'
+            commit-hash: '4c06c79095ba'
+            arch-list:  "6.0+PTX 6.1+PTX 6.2+PTX 7.0+PTX 7.2+PTX 7.5+PTX 8.0+PTX 8.6+PTX"
+            torch-install-command: 'torch==1.14.0.dev20221121+cu117 torchvision==0.15.0.dev20221121+cu117 --extra-index-url https://download.pytorch.org/whl/nightly'
+            torch-ver: '1.14.0.dev20221121+cu117'
+            alt: '-PTX'
+
+    name: xformers-${{ matrix.config.commit-hash }}-Py-${{ matrix.python }}-Cuda-${{ matrix.config.cuda-version }}-PyTorch-${{ matrix.config.torch-ver }}-${{ matrix.os }}${{ matrix.config.alt }}
+    runs-on: ${{ matrix.os }}
 
     steps:
+      - id: Cleanup-Linux-Enviroment
+        if: runner.os == 'Linux'
+        uses: ZyCromerZ/slimhub_actions@main
       - uses: actions/setup-python@v4
         id: python
         with:
-          python-version: ${{ matrix.python-version }}
-      - uses: ilammy/msvc-dev-cmd@v1
-        id: msvc
+          python-version: ${{ matrix.python }}
+      - id: msvc
+        uses: ilammy/msvc-dev-cmd@release/v1 
         with:
           vsversion: 2022
+      # - name: (Windows) Remove link.exe
+      #   if: runner.os == 'Windows'
+      #   run: rm /usr/bin/link
       - id: prepare-build
         run: |
           git clone https://github.com/facebookresearch/xformers.git
           cd xformers
+          git reset --hard ${{ matrix.config.commit-hash }}
+          pip install wheel setuptools ninja --no-cache-dir
+          pip install ${{ matrix.config.torch-install-command }} --prefer-binary --no-cache-dir
+          pip install -r requirements.txt --prefer-binary --no-cache-dir
+          pip cache purge
           git submodule update --init --recursive
-          pip install ${{ matrix.torch-install-command }}
-          pip install -r requirements.txt
-          pip install wheel
-      - id: winmemhack
+      - id: configure-pagefile
         if: runner.os == 'Windows'
-        run: |
-          (Get-Content xformers\setup.py) -replace '"4"', '"1"' | Out-File xformers\setup.py
-      - uses: Jimver/cuda-toolkit@v0.2.8
+        uses: al-cheb/configure-pagefile-action@v1.2
+        with:
+          minimum-size: 8GB
+      - uses: ZyCromerZ/cuda-toolkit@master
         id: cuda-toolkit
         with:
-          cuda: ${{ matrix.cuda-version }}
+          cuda: ${{ matrix.config.cuda-version }}
+          method: network
+      # - id: winmemhack
+      #   if: runner.os == 'Windows'
+      #   run: |
+      #     (Get-Content xformers\setup.py) -replace '"4"', '"1"' | Out-File xformers\setup.py
       - id: build
         env:
           CUDA_HOME: ${{ steps.cuda-toolkit.outputs.CUDA_PATH }}
+          TORCH_CUDA_ARCH_LIST: "${{ matrix.config.arch-list }}"
         run: |
           cd xformers
           python setup.py bdist_wheel
-      - id: rename
-        if: ${{ matrix.custom-suffix }}
-        run: |
-          cd xformers/dist/
-          rename 'dev0' 'dev0+cu117' *.whl 
       - uses: actions/upload-artifact@v3
         with:
-          name: xformers-wheel-${{ matrix.os-version }}-${{ matrix.python-version }}-${{ matrix.cuda-version }}
+          name: xformers-${{ matrix.config.commit-hash }}-Py-${{ matrix.python }}-Cuda-${{ matrix.config.cuda-version }}-PyTorch-${{ matrix.config.torch-ver }}-${{ matrix.os }}${{ matrix.config.alt }}
           path: xformers/dist/*.whl
-  release:
-    needs: [build]
-    runs-on: ubuntu-latest
-    steps:
-      - id: get-artifact
-        uses: actions/download-artifact@v3
       - id: release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "*/*.whl"
-          tag: ${{ github.run_id }}
+          artifacts: "xformers/dist/*.whl"
+          tag: xformers-${{ matrix.config.commit-hash }}-Py-${{ matrix.python }}-Cuda-${{ matrix.config.cuda-version }}-PyTorch-${{ matrix.config.torch-ver }}-${{ matrix.os }}${{ matrix.config.alt }}
           commit: ${{ github.sha }}
+#   release:
+#     needs: [build]
+#     runs-on: ubuntu-latest
+#     steps:
+#       - id: get-artifact
+#         uses: actions/download-artifact@v3
+#       - id: release
+#         uses: ncipollo/release-action@v1
+#         with:
+#           artifacts: "*/*.whl"
+#           tag: ${{ github.run_id }}-no-PTX
+#           commit: ${{ github.sha }}
