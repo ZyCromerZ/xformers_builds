@@ -37,26 +37,11 @@ jobs:
           - "3.8"
 
         config:
-          # - cuda-version: '11.8.0'
-          #   commit-hash: 'affe4da46272'
-          #   arch-list:  "6.0+PTX 6.1+PTX 6.2+PTX"
-          #   torch-install-command: 'torch==1.12.1+cu113 torchvision==0.13.1+cu113 --extra-index-url https://download.pytorch.org/whl/cu113'
-          #   torch-ver: '1.12.1+cu113'
-          #   alt: '-6.x-PTX'
-
-          - cuda-version: '11.3.1'
+          - cuda-version: '11.6.2'
             commit-hash: 'affe4da46272'
             arch-list:  "5.0;5.2+PTX;5.3;6.0;6.1+PTX;7.0+PTX;7.5+PTX;8.0;8.6+PTX" # from https://github.com/pytorch/pytorch/blob/fe87ae692f813934d1a74d000fd1e3b546c27ae2/torch/utils/cpp_extension.py#L1740
-            torch-install-command: 'torch==1.12.1+cu113 torchvision==0.13.1+cu113 --extra-index-url https://download.pytorch.org/whl/cu113'
-            torch-ver: '1.12.1+cu113'
-            alt: ''
-            last-date: '2022-12-10'
-
-          - cuda-version: '11.8.0'
-            commit-hash: 'affe4da46272'
-            arch-list:  "5.0;5.2+PTX;5.3;6.0;6.1+PTX;7.0+PTX;7.5+PTX;8.0;8.6+PTX" # from https://github.com/pytorch/pytorch/blob/fe87ae692f813934d1a74d000fd1e3b546c27ae2/torch/utils/cpp_extension.py#L1740
-            torch-install-command: 'torch==1.12.1+cu116 torchvision==0.13.1+cu116 --extra-index-url https://download.pytorch.org/whl/cu116'
-            torch-ver: '1.12.1+cu116'
+            torch-install-command: 'torch==1.13.0+cu116 torchvision==0.14.0+cu116 --extra-index-url https://download.pytorch.org/whl/cu116'
+            torch-ver: '1.13.0+cu116'
             alt: ''
             last-date: '2022-12-10'
 
