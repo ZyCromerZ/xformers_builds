@@ -34,16 +34,17 @@ jobs:
 
         python:
           - "3.10"
-          # - "3.8"
+          - "3.11"
 
         config:
           - cuda-version: '11.8.0'
-            commit-hash: '12c076d8ae9f'
+            commit-hash: '57edbb7a7e31'
             arch-list:  "5.0;5.2+PTX;5.3;6.0;6.1+PTX;7.0+PTX;7.5+PTX;8.0;8.6+PTX" # from https://github.com/pytorch/pytorch/blob/fe87ae692f813934d1a74d000fd1e3b546c27ae2/torch/utils/cpp_extension.py#L1740
-            torch-install-command: 'torch==2.0.0.dev20230213+cu118 torchvision==0.15.0.dev20230213+cu118 --extra-index-url https://download.pytorch.org/whl/nightly'
-            torch-ver: '2.0.0.dev20230213+cu118'
+            torch-install-command: 'torch==2.0.0.dev20230224+cu118 --extra-index-url https://download.pytorch.org/whl/nightly'
+            torchvision-install-command: 'torchvision==0.15.0.dev20230224+cu118 --extra-index-url https://download.pytorch.org/whl/nightly'
+            torch-ver: '2.0.0.dev20230224+cu118'
             alt: ''
-            last-date: '2023-02-12'
+            last-date: '2023-02-25'
 
     name: xformers-${{ matrix.config.last-date }}-Py-${{ matrix.python }}-Cuda-${{ matrix.config.cuda-version }}-PyTorch-${{ matrix.config.torch-ver }}-${{ matrix.os }}${{ matrix.config.alt }}
     
@@ -89,6 +90,7 @@ jobs:
           git reset --hard ${{ matrix.config.commit-hash }}
           pip install wheel setuptools ninja --no-cache-dir
           pip install ${{ matrix.config.torch-install-command }} --prefer-binary --no-cache-dir
+          pip install ${{ matrix.config.torchvision-install-command }} --prefer-binary --no-cache-dir
           pip install -r requirements.txt --prefer-binary --no-cache-dir
           pip cache purge
           git submodule update --init --recursive
