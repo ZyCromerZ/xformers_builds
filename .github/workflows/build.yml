@@ -33,33 +33,34 @@ jobs:
           - ubuntu-18.04
 
         python:
+          - "3.11"
           - "3.10"
           - "3.8"
 
         config:
           - cuda-version: '11.6.2'
-            commit-hash: '57edbb7a7e31'
+            commit-hash: 'b89a4935c7de'
             arch-list:  "5.0;5.2+PTX;5.3;6.0;6.1+PTX;7.0+PTX;7.5+PTX;8.0;8.6+PTX" # from https://github.com/pytorch/pytorch/blob/fe87ae692f813934d1a74d000fd1e3b546c27ae2/torch/utils/cpp_extension.py#L1740
             torch-install-command: 'torch==1.13.0+cu116 torchvision==0.14.0+cu116 --extra-index-url https://download.pytorch.org/whl/cu116'
             torch-ver: '1.13.0+cu116'
             alt: ''
-            last-date: '2023-02-25'
+            last-date: '2023-03-05'
 
           - cuda-version: '11.8.0'
-            commit-hash: '57edbb7a7e31'
+            commit-hash: 'b89a4935c7de'
             arch-list:  "5.0;5.2+PTX;5.3;6.0;6.1+PTX;7.0+PTX;7.5+PTX;8.0;8.6+PTX" # from https://github.com/pytorch/pytorch/blob/fe87ae692f813934d1a74d000fd1e3b546c27ae2/torch/utils/cpp_extension.py#L1740
             torch-install-command: 'torch==1.13.1+cu117 torchvision==0.14.1+cu117 --extra-index-url https://download.pytorch.org/whl/cu117'
             torch-ver: '1.13.1+cu117'
             alt: ''
-            last-date: '2023-02-25'
+            last-date: '2023-03-05'
 
           - cuda-version: '11.8.0'
-            commit-hash: '57edbb7a7e31'
+            commit-hash: 'b89a4935c7de'
             arch-list:  "5.0;5.2+PTX;5.3;6.0;6.1+PTX;7.0+PTX;7.5+PTX;8.0;8.6+PTX" # from https://github.com/pytorch/pytorch/blob/fe87ae692f813934d1a74d000fd1e3b546c27ae2/torch/utils/cpp_extension.py#L1740
-            torch-install-command: 'torch==2.0.0.dev20230224+cu118 torchvision==0.15.0.dev20230224+cu118 --extra-index-url https://download.pytorch.org/whl/nightly'
-            torch-ver: '2.0.0.dev20230224+cu118'
+            torch-install-command: 'torch==2.1.0.dev20230303+cu118 torchvision==0.15.0.dev20230303+cu118 --extra-index-url https://download.pytorch.org/whl/nightly'
+            torch-ver: '2.1.0.dev20230303+cu118'
             alt: ''
-            last-date: '2023-02-25'
+            last-date: '2023-03-05'
 
     name: xformers-${{ matrix.config.last-date }}-Py-${{ matrix.python }}-Cuda-${{ matrix.config.cuda-version }}-PyTorch-${{ matrix.config.torch-ver }}-${{ matrix.os }}${{ matrix.config.alt }}
     
