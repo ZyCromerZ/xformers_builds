@@ -39,18 +39,25 @@ jobs:
 
         config:
           - cuda-version: '11.8.0'
-            commit-hash: '6425fd0cacb1'
+            commit-hash: 'a74599b94bea'
             arch-list:  "5.0;5.2+PTX;5.3;6.0;6.1+PTX;7.0+PTX;7.5+PTX;8.0;8.6+PTX" # from https://github.com/pytorch/pytorch/blob/fe87ae692f813934d1a74d000fd1e3b546c27ae2/torch/utils/cpp_extension.py#L1740
-            torch-install-command: 'torch==2.0.0+cu118 torchvision==0.15.1+cu118 --extra-index-url https://download.pytorch.org/whl/cu118'
+            torch-install-command: 'torch==2.0.0+cu118 torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu118'
             torch-ver: '2.0.0+cu118'
+            alt: ''
+            last-date: '2023-05-11'
+          - cuda-version: '11.8.0'
+            commit-hash: 'a74599b94bea'
+            arch-list:  "5.0;5.2+PTX;5.3;6.0;6.1+PTX;7.0+PTX;7.5+PTX;8.0;8.6+PTX" # from https://github.com/pytorch/pytorch/blob/fe87ae692f813934d1a74d000fd1e3b546c27ae2/torch/utils/cpp_extension.py#L1740
+            torch-install-command: 'torch==2.0.1+cu118 torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu118'
+            torch-ver: '2.0.1+cu118'
             alt: ''
             last-date: '2023-05-11'
 
           - cuda-version: '12.1.0'
-            commit-hash: '6425fd0cacb1'
+            commit-hash: 'a74599b94bea'
             arch-list:  "5.0;5.2+PTX;5.3;6.0;6.1+PTX;7.0+PTX;7.5+PTX;8.0;8.6+PTX" # from https://github.com/pytorch/pytorch/blob/fe87ae692f813934d1a74d000fd1e3b546c27ae2/torch/utils/cpp_extension.py#L1740
-            torch-install-command: 'torch==2.1.0.dev20230508+cu121 torchvision==0.16.0.dev20230508+cu121 --extra-index-url https://download.pytorch.org/whl/nightly/cu121'
-            torch-ver: '2.1.0.dev20230508+cu121'
+            torch-install-command: 'torch==2.1.0.dev20230513+cu121 torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/nightly/cu121'
+            torch-ver: '2.1.0.dev20230513+cu121'
             alt: ''
             last-date: '2023-05-11'
 
